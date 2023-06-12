@@ -1,0 +1,4 @@
+airbus-ship-detection
+__pycache__
+.DS_Store
+wandb

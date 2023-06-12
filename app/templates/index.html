@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Ship Detection</title>
+    <style>
+      body {
+        background: linear-gradient(to bottom right, #b19cd9, #0066ff);
+        font-family: Arial, sans-serif;
+        color: white;
+        text-align: center;
+        padding: 40px;
+        height: 100vh;
+      }
+      h1 {
+        font-size: 36px;
+        margin-bottom: 20px;
+      }
+      .container {
+        background: rgba(255, 255, 255, 0.5);
+        padding: 20px;
+        border-radius: 10px;
+        display: inline-block;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+        margin-top: 100px;
+      }
+      .upload-btn-wrapper {
+        position: relative;
+        overflow: hidden;
+        display: inline-block;
+        margin-bottom: 20px;
+      }
+      .custom-file-upload {
+        border: 2px solid gray;
+        color: gray;
+        background-color: white;
+        padding: 8px 20px;
+        border-radius: 8px;
+        font-size: 18px;
+        font-weight: bold;
+      }
+      .upload-btn-wrapper input[type="file"] {
+        font-size: 100px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0;
+      }
+      .download-btn a {
+        display: inline-block;
+        padding: 8px 20px;
+        background-color: #5343d1;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-size: 18px;
+        font-weight: bold;
+      }
+      .image-container {
+        margin-top: 20px;
+      }
+      .image-container img {
+        margin: 10px;
+        max-width: 400px;
+        max-height: 400px;
+      }
+
+      .upload-btn-wrapper {
+        position: relative;
+        overflow: hidden;
+        display: inline-block;
+      }
+
+      .upload-btn-wrapper input[type="file"] {
+        font-size: 100px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0;
+      }
+    </style>
+    <script>
+      // Function to display selected image
+      function handleFileUpload() {
+        var fileUpload = document.getElementById("file-upload");
+        var customUpload = document.getElementById("custom-upload");
+
+        fileUpload.addEventListener("change", function () {
+          customUpload.innerHTML = "File uploaded";
+          customUpload.classList.add("hovered");
+        });
+      }
+      window.addEventListener("load", function () {
+        handleFileUpload();
+      });
+    </script>
+  </head>
+  <body>
+    <h1>Ship Detection</h1>
+    <div class="container">
+      <form action="/process" method="post" enctype="multipart/form-data">
+        <label for="file-upload" class="custom-file-upload" id="custom-upload">
+          Select Image
+        </label>
+        <div class="upload-btn-wrapper">
+          <input id="file-upload" type="file" name="file" />
+        </div>
+        <br />
+        <br />
+        <input
+          type="submit"
+          value="Get Segmentation Mask"
+          style="
+            background-color: #5343d1;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+          "
+        />
+      </form>
+      {% if segmentation_mask %}
+      <div class="image-container">
+        <img id="original-image" src="{{file_location}}" alt="Original Image" />
+        <img
+          id="processed-image"
+          src="{{ segmentation_mask }}"
+          alt="Segmentation Mask"
+        />
+      </div>
+      <div class="download-btn">
+        <a href="{{ segmentation_mask }}" download
+          >Download Segmentation Mask</a
+        >
+      </div>
+      {% endif %}
+    </div>
+  </body>
+</html>
